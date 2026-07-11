@@ -6,6 +6,6 @@ int main()
 {
     cout<<"Hello";
     cout<<"GM"<<endl;
-    cout<<"HRU"<<"\n";
+    cout<<"jannat"<<"\n";
     cout<<"M good";
 }
