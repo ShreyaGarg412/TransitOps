@@ -1,5 +1,7 @@
+import { useState } from "react";
+
 function Vehicles() {
-  const vehicles = [
+  const [vehicles, setVehicles] = useState([
     {
       id: 1,
       number: "DL01AB1234",
@@ -14,14 +16,55 @@ function Vehicles() {
       type: "Van",
       status: "On Trip",
     },
-    {
-      id: 3,
-      number: "DL03EF9012",
-      driver: "Karan",
-      type: "Truck",
-      status: "Maintenance",
-    },
-  ];
+  ]);
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [newVehicle, setNewVehicle] = useState({
+    number: "",
+    driver: "",
+    type: "",
+    status: "Available",
+  });
+
+  const handleChange = (e) => {
+    setNewVehicle({
+      ...newVehicle,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const addVehicle = () => {
+    if (
+      !newVehicle.number ||
+      !newVehicle.driver ||
+      !newVehicle.type
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    setVehicles([
+      ...vehicles,
+      {
+        id: Date.now(),
+        ...newVehicle,
+      },
+    ]);
+
+    setNewVehicle({
+      number: "",
+      driver: "",
+      type: "",
+      status: "Available",
+    });
+
+    setShowForm(false);
+  };
+
+  const deleteVehicle = (id) => {
+    setVehicles(vehicles.filter((vehicle) => vehicle.id !== id));
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -29,12 +72,14 @@ function Vehicles() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "20px",
         }}
       >
-        <h1>Vehicles</h1>
+        <h1>Vehicle Management</h1>
 
         <button
+          onClick={() => setShowForm(!showForm)}
           style={{
             background: "#2563eb",
             color: "white",
@@ -48,17 +93,71 @@ function Vehicles() {
         </button>
       </div>
 
-      <input
-        type="text"
-        placeholder="Search Vehicle..."
-        style={{
-          width: "300px",
-          padding: "10px",
-          marginBottom: "20px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-        }}
-      />
+      {showForm && (
+        <div
+          style={{
+            background: "#f3f4f6",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            type="text"
+            name="number"
+            placeholder="Vehicle Number"
+            value={newVehicle.number}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="driver"
+            placeholder="Driver Name"
+            value={newVehicle.driver}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="type"
+            placeholder="Vehicle Type"
+            value={newVehicle.type}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <select
+            name="status"
+            value={newVehicle.status}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          >
+            <option>Available</option>
+            <option>On Trip</option>
+            <option>Maintenance</option>
+          </select>
+
+          <br />
+
+          <button
+            onClick={addVehicle}
+            style={{
+              marginTop: "15px",
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Save Vehicle
+          </button>
+        </div>
+      )}
 
       <table
         style={{
@@ -73,7 +172,7 @@ function Vehicles() {
             <th>Driver</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -84,10 +183,26 @@ function Vehicles() {
               <td>{vehicle.driver}</td>
               <td>{vehicle.type}</td>
               <td>{vehicle.status}</td>
+
               <td>
                 <button
                   style={{
-                    background: "#22c55e",
+                    background: "#f59e0b",
+                    color: "white",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    marginRight: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteVehicle(vehicle.id)}
+                  style={{
+                    background: "#dc2626",
                     color: "white",
                     border: "none",
                     padding: "6px 12px",
@@ -95,7 +210,7 @@ function Vehicles() {
                     cursor: "pointer",
                   }}
                 >
-                  Edit
+                  Delete
                 </button>
               </td>
             </tr>

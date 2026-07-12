@@ -1,5 +1,7 @@
+import { useState } from "react";
+
 function Trips() {
-  const trips = [
+  const [trips, setTrips] = useState([
     {
       id: 1,
       route: "Delhi → Jaipur",
@@ -14,14 +16,55 @@ function Trips() {
       driver: "Aman Kumar",
       status: "Ongoing",
     },
-    {
-      id: 3,
-      route: "Delhi → Agra",
-      vehicle: "DL03EF9012",
-      driver: "Karan Singh",
+  ]);
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [newTrip, setNewTrip] = useState({
+    route: "",
+    vehicle: "",
+    driver: "",
+    status: "Scheduled",
+  });
+
+  const handleChange = (e) => {
+    setNewTrip({
+      ...newTrip,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const addTrip = () => {
+    if (
+      !newTrip.route ||
+      !newTrip.vehicle ||
+      !newTrip.driver
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    setTrips([
+      ...trips,
+      {
+        id: Date.now(),
+        ...newTrip,
+      },
+    ]);
+
+    setNewTrip({
+      route: "",
+      vehicle: "",
+      driver: "",
       status: "Scheduled",
-    },
-  ];
+    });
+
+    setShowForm(false);
+  };
+
+  const deleteTrip = (id) => {
+    setTrips(trips.filter((trip) => trip.id !== id));
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -29,12 +72,14 @@ function Trips() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "20px",
         }}
       >
-        <h1>Trips</h1>
+        <h1>Trip Management</h1>
 
         <button
+          onClick={() => setShowForm(!showForm)}
           style={{
             background: "#2563eb",
             color: "white",
@@ -48,17 +93,71 @@ function Trips() {
         </button>
       </div>
 
-      <input
-        type="text"
-        placeholder="Search Trips..."
-        style={{
-          width: "300px",
-          padding: "10px",
-          marginBottom: "20px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-        }}
-      />
+      {showForm && (
+        <div
+          style={{
+            background: "#f3f4f6",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            type="text"
+            name="route"
+            placeholder="Route"
+            value={newTrip.route}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="vehicle"
+            placeholder="Vehicle Number"
+            value={newTrip.vehicle}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="driver"
+            placeholder="Driver Name"
+            value={newTrip.driver}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <select
+            name="status"
+            value={newTrip.status}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          >
+            <option>Scheduled</option>
+            <option>Ongoing</option>
+            <option>Completed</option>
+          </select>
+
+          <br />
+
+          <button
+            onClick={addTrip}
+            style={{
+              marginTop: "15px",
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Save Trip
+          </button>
+        </div>
+      )}
 
       <table
         style={{
@@ -73,6 +172,7 @@ function Trips() {
             <th>Vehicle</th>
             <th>Driver</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -83,6 +183,36 @@ function Trips() {
               <td>{trip.vehicle}</td>
               <td>{trip.driver}</td>
               <td>{trip.status}</td>
+
+              <td>
+                <button
+                  style={{
+                    background: "#f59e0b",
+                    color: "white",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    marginRight: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteTrip(trip.id)}
+                  style={{
+                    background: "#dc2626",
+                    color: "white",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,27 +1,70 @@
+import { useState } from "react";
+
 function Drivers() {
-  const drivers = [
+  const [drivers, setDrivers] = useState([
     {
       id: 1,
       name: "Rahul Sharma",
       phone: "9876543210",
-      vehicle: "DL01AB1234",
+      license: "DL12345",
       status: "Available",
     },
     {
       id: 2,
       name: "Aman Kumar",
-      phone: "9123456780",
-      vehicle: "DL02CD5678",
+      phone: "9123456789",
+      license: "DL67890",
       status: "On Trip",
     },
-    {
-      id: 3,
-      name: "Karan Singh",
-      phone: "9988776655",
-      vehicle: "DL03EF9012",
-      status: "Off Duty",
-    },
-  ];
+  ]);
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [newDriver, setNewDriver] = useState({
+    name: "",
+    phone: "",
+    license: "",
+    status: "Available",
+  });
+
+  const handleChange = (e) => {
+    setNewDriver({
+      ...newDriver,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const addDriver = () => {
+    if (
+      !newDriver.name ||
+      !newDriver.phone ||
+      !newDriver.license
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    setDrivers([
+      ...drivers,
+      {
+        id: Date.now(),
+        ...newDriver,
+      },
+    ]);
+
+    setNewDriver({
+      name: "",
+      phone: "",
+      license: "",
+      status: "Available",
+    });
+
+    setShowForm(false);
+  };
+
+  const deleteDriver = (id) => {
+    setDrivers(drivers.filter((driver) => driver.id !== id));
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -29,12 +72,14 @@ function Drivers() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "20px",
         }}
       >
-        <h1>Drivers</h1>
+        <h1>Driver Management</h1>
 
         <button
+          onClick={() => setShowForm(!showForm)}
           style={{
             background: "#2563eb",
             color: "white",
@@ -48,17 +93,71 @@ function Drivers() {
         </button>
       </div>
 
-      <input
-        type="text"
-        placeholder="Search Driver..."
-        style={{
-          width: "300px",
-          padding: "10px",
-          marginBottom: "20px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-        }}
-      />
+      {showForm && (
+        <div
+          style={{
+            background: "#f3f4f6",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Driver Name"
+            value={newDriver.name}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={newDriver.phone}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <input
+            type="text"
+            name="license"
+            placeholder="License Number"
+            value={newDriver.license}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          />
+
+          <select
+            name="status"
+            value={newDriver.status}
+            onChange={handleChange}
+            style={{ margin: "10px", padding: "10px" }}
+          >
+            <option>Available</option>
+            <option>On Trip</option>
+            <option>Leave</option>
+          </select>
+
+          <br />
+
+          <button
+            onClick={addDriver}
+            style={{
+              marginTop: "15px",
+              background: "green",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Save Driver
+          </button>
+        </div>
+      )}
 
       <table
         style={{
@@ -71,9 +170,9 @@ function Drivers() {
           <tr style={{ background: "#2563eb", color: "white" }}>
             <th style={{ padding: "12px" }}>Name</th>
             <th>Phone</th>
-            <th>Vehicle</th>
+            <th>License</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -82,12 +181,28 @@ function Drivers() {
             <tr key={driver.id} style={{ textAlign: "center" }}>
               <td style={{ padding: "12px" }}>{driver.name}</td>
               <td>{driver.phone}</td>
-              <td>{driver.vehicle}</td>
+              <td>{driver.license}</td>
               <td>{driver.status}</td>
+
               <td>
                 <button
                   style={{
-                    background: "#22c55e",
+                    background: "#f59e0b",
+                    color: "white",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    marginRight: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteDriver(driver.id)}
+                  style={{
+                    background: "#dc2626",
                     color: "white",
                     border: "none",
                     padding: "6px 12px",
@@ -95,7 +210,7 @@ function Drivers() {
                     cursor: "pointer",
                   }}
                 >
-                  Edit
+                  Delete
                 </button>
               </td>
             </tr>
