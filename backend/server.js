@@ -5,7 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const authRoutes = require("./routes/authRoutes");
 const connectDB = require("./config/db");
-
+const driverRoutes = require("./routes/driverRoutes");
 const app = express();
 
 // Connect Database
@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
+app.use("/api/drivers", driverRoutes);
 // Test Route
 app.get("/", (req, res) => {
     res.send("🚀 TransitOps Backend Running");
