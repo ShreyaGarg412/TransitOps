@@ -1,76 +1,103 @@
-import { useState } from "react";
-
 function Vehicles() {
-  const [vehicles, setVehicles] = useState([
+  const vehicles = [
     {
+      id: 1,
       number: "DL01AB1234",
-      model: "Tata Bus",
       driver: "Rahul",
+      type: "Bus",
       status: "Available",
     },
     {
-      number: "DL05XY5678",
-      model: "Ashok Leyland",
-      driver: "Amit",
+      id: 2,
+      number: "DL02CD5678",
+      driver: "Aman",
+      type: "Van",
       status: "On Trip",
     },
-  ]);
-
-  const addVehicle = () => {
-    const newVehicle = {
-      number: "DL09ZZ9999",
-      model: "Volvo Bus",
-      driver: "New Driver",
-      status: "Available",
-    };
-
-    setVehicles([...vehicles, newVehicle]);
-  };
+    {
+      id: 3,
+      number: "DL03EF9012",
+      driver: "Karan",
+      type: "Truck",
+      status: "Maintenance",
+    },
+  ];
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h1>Vehicle Management</h1>
-
-      <button
-        onClick={addVehicle}
+    <div style={{ padding: "20px" }}>
+      <div
         style={{
-          margin: "20px 0",
-          padding: "10px 20px",
-          background: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
         }}
       >
-        + Add Vehicle
-      </button>
+        <h1>Vehicles</h1>
+
+        <button
+          style={{
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          + Add Vehicle
+        </button>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Search Vehicle..."
+        style={{
+          width: "300px",
+          padding: "10px",
+          marginBottom: "20px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+        }}
+      />
 
       <table
-        border="1"
-        cellPadding="10"
         style={{
           width: "100%",
           borderCollapse: "collapse",
           background: "white",
         }}
       >
-        <thead style={{ background: "#2563eb", color: "white" }}>
-          <tr>
-            <th>Vehicle No</th>
-            <th>Model</th>
+        <thead>
+          <tr style={{ background: "#2563eb", color: "white" }}>
+            <th style={{ padding: "12px" }}>Vehicle No</th>
             <th>Driver</th>
+            <th>Type</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
 
         <tbody>
-          {vehicles.map((vehicle, index) => (
-            <tr key={index}>
-              <td>{vehicle.number}</td>
-              <td>{vehicle.model}</td>
+          {vehicles.map((vehicle) => (
+            <tr key={vehicle.id} style={{ textAlign: "center" }}>
+              <td style={{ padding: "12px" }}>{vehicle.number}</td>
               <td>{vehicle.driver}</td>
+              <td>{vehicle.type}</td>
               <td>{vehicle.status}</td>
+              <td>
+                <button
+                  style={{
+                    background: "#22c55e",
+                    color: "white",
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,67 +1,87 @@
-import { useState } from "react";
-
 function Trips() {
-  const [trips] = useState([
+  const trips = [
     {
-      id: "TR001",
+      id: 1,
+      route: "Delhi → Jaipur",
       vehicle: "DL01AB1234",
       driver: "Rahul Sharma",
-      route: "Delhi → Gurgaon",
       status: "Completed",
     },
     {
-      id: "TR002",
-      vehicle: "DL05XY5678",
-      driver: "Amit Kumar",
-      route: "Delhi → Noida",
-      status: "Running",
+      id: 2,
+      route: "Delhi → Chandigarh",
+      vehicle: "DL02CD5678",
+      driver: "Aman Kumar",
+      status: "Ongoing",
     },
-  ]);
+    {
+      id: 3,
+      route: "Delhi → Agra",
+      vehicle: "DL03EF9012",
+      driver: "Karan Singh",
+      status: "Scheduled",
+    },
+  ];
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h1>Trip Management</h1>
-
-      <button
+    <div style={{ padding: "20px" }}>
+      <div
         style={{
-          margin: "20px 0",
-          padding: "10px 20px",
-          background: "#f59e0b",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
         }}
       >
-        + Add Trip
-      </button>
+        <h1>Trips</h1>
+
+        <button
+          style={{
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          + Add Trip
+        </button>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Search Trips..."
+        style={{
+          width: "300px",
+          padding: "10px",
+          marginBottom: "20px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+        }}
+      />
 
       <table
-        border="1"
-        cellPadding="10"
         style={{
           width: "100%",
           borderCollapse: "collapse",
           background: "white",
         }}
       >
-        <thead style={{ background: "#f59e0b", color: "white" }}>
-          <tr>
-            <th>Trip ID</th>
+        <thead>
+          <tr style={{ background: "#2563eb", color: "white" }}>
+            <th style={{ padding: "12px" }}>Route</th>
             <th>Vehicle</th>
             <th>Driver</th>
-            <th>Route</th>
             <th>Status</th>
           </tr>
         </thead>
 
         <tbody>
-          {trips.map((trip, index) => (
-            <tr key={index}>
-              <td>{trip.id}</td>
+          {trips.map((trip) => (
+            <tr key={trip.id} style={{ textAlign: "center" }}>
+              <td style={{ padding: "12px" }}>{trip.route}</td>
               <td>{trip.vehicle}</td>
               <td>{trip.driver}</td>
-              <td>{trip.route}</td>
               <td>{trip.status}</td>
             </tr>
           ))}
